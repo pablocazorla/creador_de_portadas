@@ -596,6 +596,10 @@ const createLapiz = function (canvas) {
     ctx.restore();
     return L;
   };
+  L.clear = function () {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    return L;
+  };
 
   return L;
 };

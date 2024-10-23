@@ -1,12 +1,6 @@
 import createLapiz from "../../js/utils/createLapiz";
 import ImageList from "../../js/imageList";
-
-/***********************************/
-const numeroDeEdicion = 9;
-const portada = "/images/ops/rock_hard.jpg";
-const portadaRealWidth = 2500;
-const portadaY = 600;
-/***********************************/
+import data from "../../data/rueda-ludica/rd16";
 
 const canvas = document.getElementById("my-canvas");
 
@@ -27,20 +21,82 @@ const onRender = () => {
     },
   });
 
-  L.imageCropped({
-    image: "portada",
-    source: {
-      x: 0,
-      y: portadaY,
-      width: portadaRealWidth,
-      height: (rectHeight * portadaRealWidth) / 1920,
-    },
-    destiny: {
-      x: 0,
-      y: 0.5 * (height - rectHeight),
-      width: 1920,
-      height: rectHeight,
-    },
+  const portadaLength = data.portada.length;
+  const portadaPadding = 160;
+  data.portada.forEach((portada, i) => {
+    const portadaScale = portada.scale || 1;
+    L.ctx.save();
+
+    if (i) {
+      L.ctx.fillStyle = "rgba(0,0,0,1)";
+      L.ctx.shadowColor = "rgba(0,0,0,0.6)";
+      L.ctx.shadowBlur = 40;
+      L.ctx.shadowOffsetX = -20;
+      L.ctx.shadowOffsetY = 0;
+
+      L.ctx.beginPath();
+      L.ctx.moveTo(
+        (width / portadaLength) * i + portadaPadding,
+        0.5 * (height - rectHeight)
+      );
+      L.ctx.lineTo(
+        (width / portadaLength) * i + width,
+        0.5 * (height - rectHeight)
+      );
+      L.ctx.lineTo(
+        (width / portadaLength) * i + width,
+        0.5 * (height - rectHeight) + rectHeight
+      );
+      L.ctx.lineTo(
+        (width / portadaLength) * i - portadaPadding,
+        0.5 * (height - rectHeight) + rectHeight
+      );
+      L.ctx.closePath();
+      L.ctx.fill();
+      L.ctx.clip();
+    }
+
+    L.imageCropped({
+      image: `portada${i}`,
+      source: {
+        x: portada.x,
+        y: portada.y,
+        width: portada.width / portadaScale,
+        height: (rectHeight * portada.width) / width / portadaScale,
+      },
+      destiny: {
+        x: 0,
+        y: 0.5 * (height - rectHeight),
+        width,
+        height: rectHeight,
+      },
+    });
+
+    if (i) {
+      L.ctx.lineWidth = 4;
+      L.ctx.strokeStyle = "rgba(255,255,255,0.6)";
+      L.ctx.beginPath();
+      L.ctx.moveTo(
+        (width / portadaLength) * i + portadaPadding,
+        0.5 * (height - rectHeight)
+      );
+      L.ctx.lineTo(
+        (width / portadaLength) * i + width,
+        0.5 * (height - rectHeight)
+      );
+      L.ctx.lineTo(
+        (width / portadaLength) * i + width,
+        0.5 * (height - rectHeight) + rectHeight
+      );
+      L.ctx.lineTo(
+        (width / portadaLength) * i - portadaPadding,
+        0.5 * (height - rectHeight) + rectHeight
+      );
+      L.ctx.closePath();
+      L.ctx.stroke();
+    }
+
+    L.ctx.restore();
   });
 
   L.rect({
@@ -50,7 +106,7 @@ const onRender = () => {
     height: rectHeight,
     color: "#000",
     borderWidth: 0,
-    opacity: 0.5,
+    opacity: data.portadaDimmer || 0.5,
   });
   L.rect({
     x: 0,
@@ -129,7 +185,7 @@ const onRender = () => {
     opacity: 0.7,
   });
 
-  const titleX = 100;
+  const titleX = 50;
   const laruedaludicaWidth = 1400;
   L.imageCropped({
     ...ImageList.laruedaludica.image,
@@ -152,7 +208,7 @@ const onRender = () => {
   });
 
   L.text({
-    text: `${numeroDeEdicion}`,
+    text: `${data.numeroDeEdicion}`,
     x: 1500 + titleX,
     y: -30,
     width: 400,
@@ -165,48 +221,61 @@ const onRender = () => {
     //textAlign: "center",
   }).render();
 
-  const yTexts = 360;
+  if (data?.texts.length) {
+    const xBase = 460;
+    const prBase = 100;
+    data.texts.forEach(({ title, subtitle, x, y, scale = 1, white }) => {
+      L.text({
+        text: title || "",
+        x: xBase + x,
+        y,
+        width: width - xBase - prBase,
+        fontSize: 74 * scale,
+        color: white ? "#fff" : "#eecc5d",
+        borderWidth: 0,
+        shadow: "0 0 30px rgba(0,0,0,1)",
+        fontFamily: "Libre Baskerville",
+        italic: true,
+        textAlign: "right",
+        bold: 600,
+      }).render();
 
-  L.text({
-    text: "Tormenta de Juegos",
-    x: 0,
-    y: 300 + yTexts,
-    width: 1850,
-    fontSize: 74,
-    color: "#eecc5d",
-    borderWidth: 0,
-    shadow: "0 0 30px rgba(0,0,0,0.9)",
-    fontFamily: "Libre Baskerville",
-    italic: true,
-    textAlign: "right",
-    bold: 600,
-  }).render();
-
-  L.text({
-    text: "Rock Hard 1977",
-    x: 0,
-    y: 400 + yTexts,
-    width: 1850,
-    fontSize: 140,
-    color: "#fff",
-    borderWidth: 0,
-    shadow: "0 0 30px rgba(0,0,0,0.9)",
-    fontFamily: "Libre Baskerville",
-    // italic: true,
-    textAlign: "right",
-    bold: 600,
-  }).render();
+      L.text({
+        text: subtitle || "",
+        x: xBase + x,
+        y: 100 * scale + y,
+        width: width - xBase - prBase,
+        fontSize: 140 * scale,
+        color: "#fff",
+        borderWidth: 0,
+        shadow: "0 0 30px rgba(0,0,0,1)",
+        fontFamily: "Libre Baskerville",
+        textAlign: "right",
+        bold: 600,
+      }).render();
+    });
+  }
 };
 
 // Images
+
+const portadas = (() => {
+  const p = {};
+
+  data.portada.forEach(({ src }, i) => {
+    p[`portada${i}`] = src;
+  });
+
+  return p;
+})();
+
 L.setImages(
   {
     ...ImageList.background.src,
     ...ImageList.icon.src,
     ...ImageList.laruedaludica.src,
     ...ImageList.envivo.src,
-
-    portada,
+    ...portadas,
   },
   onRender
 );

@@ -6,12 +6,17 @@ body {
   background-color: #222;
   color: #fff;
   height: 100vh;
+  width: 100vw;
   display: grid;
   place-items: center;
 }
 .app {
   width: 100%;
+  max-width: 1300px;
   padding: 20px 40px;
+}
+.app.app-instagram {
+  max-width: 760px;
 }
 canvas {
   display: block;
@@ -22,4 +27,22 @@ canvas {
   height: auto !important;
   margin: 0 auto;
   color: #eecc5d;
+}
+
+.btn {
+  display: inline-block;
+  text-align: center;
+  font-weight: bold;
+  background-color: rgb(57, 98, 133);
+  color: #fff;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 8px;
+}
+.btn:hover {
+  background-color: rgb(36, 62, 85);
+}
+
+.video {
+  background: #000;
 }

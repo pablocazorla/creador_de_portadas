@@ -1,12 +1,6 @@
 import createLapiz from "../../js/utils/createLapiz";
 import ImageList from "../../js/imageList";
-
-/***********************************/
-const numeroDeEdicion = 9;
-const portada = "/images/ops/rock_hard.jpg";
-const portadaRealWidth = 2500;
-const portadaY = 0;
-/***********************************/
+import data from "../../data/rueda-ludica/rd16";
 
 const canvas = document.getElementById("my-canvas");
 
@@ -27,20 +21,82 @@ const onRender = () => {
     },
   });
 
-  L.imageCropped({
-    image: "portada",
-    source: {
-      x: 0,
-      y: portadaY,
-      width: portadaRealWidth,
-      height: (rectHeight * portadaRealWidth) / width,
-    },
-    destiny: {
-      x: 0,
-      y: 0.5 * (height - rectHeight),
-      width: width,
-      height: rectHeight,
-    },
+  const portadaLength = data.portada.length;
+  const portadaPadding = 100;
+  data.portada.forEach((portada, i) => {
+    const portadaScale = portada.scaleInstagram || portada.scale || 1;
+    L.ctx.save();
+
+    if (i) {
+      L.ctx.fillStyle = "rgba(0,0,0,1)";
+      L.ctx.shadowColor = "rgba(0,0,0,0.6)";
+      L.ctx.shadowBlur = 40;
+      L.ctx.shadowOffsetX = -20;
+      L.ctx.shadowOffsetY = 0;
+
+      L.ctx.beginPath();
+      L.ctx.moveTo(
+        (width / portadaLength) * i + portadaPadding,
+        0.5 * (height - rectHeight)
+      );
+      L.ctx.lineTo(
+        (width / portadaLength) * i + width,
+        0.5 * (height - rectHeight)
+      );
+      L.ctx.lineTo(
+        (width / portadaLength) * i + width,
+        0.5 * (height - rectHeight) + rectHeight
+      );
+      L.ctx.lineTo(
+        (width / portadaLength) * i - portadaPadding,
+        0.5 * (height - rectHeight) + rectHeight
+      );
+      L.ctx.closePath();
+      L.ctx.fill();
+      L.ctx.clip();
+    }
+
+    L.imageCropped({
+      image: `portada${i}`,
+      source: {
+        x: portada.instagramX || portada.x || 0,
+        y: portada.instagramY || portada.y || 0,
+        width: portada.width / portadaScale,
+        height: (rectHeight * portada.width) / width / portadaScale,
+      },
+      destiny: {
+        x: 0,
+        y: 0.5 * (height - rectHeight),
+        width,
+        height: rectHeight,
+      },
+    });
+
+    if (i) {
+      L.ctx.lineWidth = 4;
+      L.ctx.strokeStyle = "rgba(255,255,255,0.6)";
+      L.ctx.beginPath();
+      L.ctx.moveTo(
+        (width / portadaLength) * i + portadaPadding,
+        0.5 * (height - rectHeight)
+      );
+      L.ctx.lineTo(
+        (width / portadaLength) * i + width,
+        0.5 * (height - rectHeight)
+      );
+      L.ctx.lineTo(
+        (width / portadaLength) * i + width,
+        0.5 * (height - rectHeight) + rectHeight
+      );
+      L.ctx.lineTo(
+        (width / portadaLength) * i - portadaPadding,
+        0.5 * (height - rectHeight) + rectHeight
+      );
+      L.ctx.closePath();
+      L.ctx.stroke();
+    }
+
+    L.ctx.restore();
   });
 
   L.rect({
@@ -50,7 +106,7 @@ const onRender = () => {
     height: rectHeight,
     color: "#000",
     borderWidth: 0,
-    opacity: 0.5,
+    opacity: data.portadaDimmer || 0.5,
   });
   L.rect({
     x: 0,
@@ -129,7 +185,7 @@ const onRender = () => {
     opacity: 0.8,
   });
 
-  const titleX = 50;
+  const titleX = -10;
   const laruedaludicaWidth = 700;
   L.imageCropped({
     ...ImageList.laruedaludica.image,
@@ -152,7 +208,7 @@ const onRender = () => {
   });
 
   L.text({
-    text: `${numeroDeEdicion}`,
+    text: `${data.numeroDeEdicion}`,
     x: 760 + titleX,
     y: -30,
     width: 400,
@@ -165,37 +221,65 @@ const onRender = () => {
     //textAlign: "center",
   }).render();
 
-  const yTexts = 220;
+  if (data?.texts.length) {
+    const xBase = 200;
+    const prBase = 40;
+    data.texts.forEach(
+      ({ title, subtitle, x, instagramX, y, instagramY, scale = 1, white }) => {
+        L.text({
+          text: title || "",
+          x: xBase + (instagramX || x || 0),
+          y: instagramY || y || 0,
+          width: width - xBase - prBase,
+          fontSize: 46 * scale,
+          color: white ? "#fff" : "#eecc5d",
+          borderWidth: 0,
+          shadow: "0 0 30px rgba(0,0,0,0.9)",
+          fontFamily: "Libre Baskerville",
+          italic: true,
+          textAlign: "right",
+          bold: 600,
+        }).render();
 
-  L.text({
-    text: "Tormenta de Juegos",
-    x: 0,
-    y: 300 + yTexts,
-    width: 950,
-    fontSize: 50,
-    color: "#eecc5d",
-    borderWidth: 0,
-    shadow: "0 0 30px rgba(0,0,0,0.9)",
-    fontFamily: "Libre Baskerville",
-    italic: true,
-    textAlign: "right",
-    bold: 600,
-  }).render();
+        L.text({
+          text: subtitle || "",
+          x: xBase + (instagramX || x),
+          y: 62 * scale + (instagramY || y),
+          width: width - xBase - prBase,
+          fontSize: 84 * scale,
+          color: "#fff",
+          borderWidth: 0,
+          shadow: "0 0 30px rgba(0,0,0,0.9)",
+          fontFamily: "Libre Baskerville",
+          textAlign: "right",
+          bold: 600,
+        }).render();
+      }
+    );
+  }
 
-  L.text({
-    text: "Rock Hard 1977",
-    x: 0,
-    y: 400 + yTexts,
-    width: 950,
-    fontSize: 90,
-    color: "#fff",
-    borderWidth: 0,
-    shadow: "0 0 30px rgba(0,0,0,0.9)",
-    fontFamily: "Libre Baskerville",
-    // italic: true,
-    textAlign: "right",
-    bold: 600,
-  }).render();
+  if(data.date){
+    L.rect({
+      x: 0,
+      y: height-230,
+      width,
+      height: 100,
+      color: "#a64399",
+    })
+    L.text({
+      text: `${data.date.text}`,
+      x: 0,
+      y: height-220,
+      width,
+      fontSize: 60,
+      color: "#fff",
+      borderWidth: 0,
+      shadow: "0 0 30px rgba(0,0,0,0.9)",
+      fontFamily: "Montserrat",
+      //bold: 600,
+      textAlign: "center",
+    }).render();
+  }
 
   L.imageCropped({
     ...ImageList.twitch.image,
@@ -209,6 +293,16 @@ const onRender = () => {
 };
 
 // Images
+const portadas = (() => {
+  const p = {};
+
+  data.portada.forEach(({ src }, i) => {
+    p[`portada${i}`] = src;
+  });
+
+  return p;
+})();
+
 L.setImages(
   {
     ...ImageList.background.src,
@@ -216,7 +310,7 @@ L.setImages(
     ...ImageList.laruedaludica.src,
     ...ImageList.envivo.src,
     ...ImageList.twitch.src,
-    portada,
+    ...portadas,
   },
   onRender
 );

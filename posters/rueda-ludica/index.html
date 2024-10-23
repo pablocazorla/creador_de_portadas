@@ -8,9 +8,48 @@
     <link rel="stylesheet" href="/index.css" />
   </head>
   <body>
+    <div class="fixed top-0 left-0 w-full py-1 px-4 bg-black bg-opacity-50">
+      <a href="/" class="text-gray-400 uppercase text-xs hover:text-white"
+        >&lt; Volver</a
+      >
+    </div>
     <div class="app">
       <canvas id="my-canvas" width="1920" height="1069"></canvas>
+      <div class="flex items-center justify-center gap-5 pt-3">
+        <div class="">
+          <button
+            class="bg-slate-600 py-1 px-3 rounded-md hover:bg-slate-500 active:bg-slate-900"
+            id="reset-levels"
+          >
+            Resetear
+          </button>
+        </div>
+
+        <div class="">
+          <div class="">Brillo</div>
+          <input type="range" value="0" min="-255" max="255" id="brillo" />
+        </div>
+        <div class="">
+          <div class="">Saturación</div>
+          <input
+            type="range"
+            value="1"
+            min="0"
+            max="3"
+            step="0.01"
+            id="saturacion"
+          />
+        </div>
+        <div class="text-center">
+          <button class="btn" id="download-btn">Descargar</button>
+        </div>
+      </div>
     </div>
     <script type="module" src="./main.js"></script>
+    <script type="module">
+      window.imgName = "rueda-ludica-poster";
+    </script>
+    <script type="module" src="../../js/utils/downloadBtn.js"></script>
+    <script type="module" src="../../js/utils/editPixels.js"></script>
   </body>
 </html>

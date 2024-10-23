@@ -4,17 +4,21 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Instagram RUEDA LUDICA</title>
+    <title>RUEDA LUDICA</title>
     <link rel="stylesheet" href="/index.css" />
   </head>
   <body>
-    <div class="fixed top-0 left-0 w-full py-1 px-4 bg-black bg-opacity-50">
-      <a href="/" class="text-gray-400 uppercase text-xs hover:text-white"
-        >&lt; Volver</a
-      >
-    </div>
-    <div class="app app-instagram">
-      <canvas id="my-canvas" width="1000" height="1000"></canvas>
+    <img id="thumbnail" />
+
+    <div class="app">
+      <div class="py-5 mb-5 border-b border-gray-600 text-center">
+        <input type="file" id="uploadInput" class="mb-4" />
+        <video src="" controls id="videoInput" class="mb-4 mx-auto"></video>
+        <button id="captureBtn" class="bg-sky-600 text-white py-1 px-4">
+          Capturar
+        </button>
+      </div>
+      <canvas id="my-canvas" width="1920" height="1069"></canvas>
       <div class="flex items-center justify-center gap-5 pt-3">
         <div class="">
           <button
@@ -47,7 +51,7 @@
     </div>
     <script type="module" src="./main.js"></script>
     <script type="module">
-      window.imgName = "rueda-ludica-instagram";
+      window.imgName = "tutorial";
     </script>
     <script type="module" src="../../js/utils/downloadBtn.js"></script>
     <script type="module" src="../../js/utils/editPixels.js"></script>

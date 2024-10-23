@@ -64,6 +64,19 @@ const ImageList = {
     },
     ratio: 142 / 967,
   },
+  cazagangas: {
+    src: { cazagangas: "/images/cazagangas.jpg" },
+    image: {
+      image: "cazagangas",
+      source: {
+        x: 0,
+        y: 0,
+        width: 1648 * 1,
+        height: 951 * 1,
+      },
+    },
+    ratio: 951 / 1648,
+  },
 };
 
 export default ImageList;
