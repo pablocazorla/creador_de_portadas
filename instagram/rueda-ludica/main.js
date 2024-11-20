@@ -1,6 +1,6 @@
 import createLapiz from "../../js/utils/createLapiz";
 import ImageList from "../../js/imageList";
-import data from "../../data/rueda-ludica/rd17";
+import data from "../../data/rueda-ludica/rd18";
 
 const canvas = document.getElementById("my-canvas");
 
@@ -258,18 +258,18 @@ const onRender = () => {
     );
   }
 
-  if(data.date){
+  if (data.date) {
     L.rect({
       x: 0,
-      y: height-230,
+      y: height - 230,
       width,
       height: 100,
       color: "#a64399",
-    })
+    });
     L.text({
       text: `${data.date.text}`,
       x: 0,
-      y: height-220,
+      y: height - 220,
       width,
       fontSize: 60,
       color: "#fff",
