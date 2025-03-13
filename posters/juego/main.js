@@ -1,32 +1,7 @@
 import createLapiz from "../../js/utils/createLapiz";
 import ImageList from "../../js/imageList";
-//import data from "../../data/tutorial/rock-hard";
+import data from "../../data/juego/tmdados";
 
-const data = {
-  backOpacity: 0.6,
-  texts: [
-    {
-      title: "Reseña",
-      subtitle: "Matcha",
-      x: 0,
-      y: 615,
-      instagramY: 540,
-      scale: 1,
-    },
-    {
-      title: "(expansión para The White Castle)",
-      //subtitle: "Matcha (expa The White Castle)",
-      x: 0,
-      white: true,
-      y: 915,
-      instagramY: 540,
-      scale: 1,
-    },
-  ],
-  mirror: true,
-};
-
-const captureBtn = document.getElementById("captureBtn");
 const canvas = document.getElementById("my-canvas");
 
 const L = createLapiz(canvas);
@@ -53,29 +28,47 @@ const onRender = () => {
     },
   });
 
-  L.ctx.save();
-  if (data?.mirror) {
-    //L.ctx.scale(-1, 1);
-    //L.ctx.translate(-width, 0);
-  }
+  data.portada.forEach((portada, i) => {
+    const portadaScale = portada.scale || 1;
+    const portadaPoints = portada?.points;
+    L.ctx.save();
 
-  L.imageCropped({
-    image: "portada",
+    L.ctx.scale(portadaScale, portadaScale);
 
-    source: {
-      x: dataPortada.x,
-      y: dataPortada.y,
-      width: width,
-      height: height * 0.9,
-    },
-    destiny: {
-      x: 0,
-      y: 0.5 * (height - rectHeight),
-      width,
-      height: rectHeight,
-    },
+    if (portadaPoints) {
+      L.ctx.fillStyle = "rgba(0,0,0,1)";
+      L.ctx.shadowColor = "rgba(0,0,0,0.6)";
+      L.ctx.shadowBlur = 40;
+      L.ctx.shadowOffsetX = -20;
+      L.ctx.shadowOffsetY = 0;
+
+      L.ctx.beginPath();
+      portadaPoints.forEach(([x, y], j) => {
+        const xp = x * portada.width + portada.x;
+        const yp = y * portada.width + portada.y;
+
+        if (j === 0) {
+          L.ctx.moveTo(xp, yp);
+        } else {
+          L.ctx.lineTo(xp, yp);
+        }
+      });
+
+      L.ctx.closePath();
+      L.ctx.fill();
+      L.ctx.clip();
+    }
+
+    L.image({
+      image: `portada${i}`,
+      x: portada.x,
+      y: portada.y,
+      width: portada.width,
+      height: portada.height,
+    });
+
+    L.ctx.restore();
   });
-  L.ctx.restore();
   ////////////////////////////////
   /* 
   L.rect({
@@ -137,14 +130,14 @@ const onRender = () => {
   if (data?.texts.length) {
     const xBase = 460;
     const prBase = 100;
-    data.texts.forEach(({ title, subtitle, white, x, y, scale }) => {
+    data.texts.forEach(({ title, subtitle, x, y, scale }) => {
       L.text({
         text: title,
         x: xBase + x,
         y,
         width: width - xBase - prBase,
         fontSize: 74 * scale,
-        color: white ? "#FFF" : "#eecc5d",
+        color: "#eecc5d",
         borderWidth: 0,
         shadow: "0 0 30px rgba(0,0,0,0.9)",
         fontFamily: "Libre Baskerville",
@@ -170,46 +163,23 @@ const onRender = () => {
   }
 };
 
+const portadas = (() => {
+  const p = {};
+
+  data.portada.forEach(({ src }, i) => {
+    p[`portada${i}`] = src;
+  });
+
+  return p;
+})();
+
 const images = {
   ...ImageList.background.src,
   ...ImageList.icon.src,
   ...ImageList.laruedaludica.src,
   ...ImageList.envivo.src,
+  ...portadas,
 };
 L.setImages(images, onRender);
 
 /*********************** */
-
-const uploadInput = document.getElementById("uploadInput");
-const videoInput = document.getElementById("videoInput");
-
-uploadInput.addEventListener("change", function (event) {
-  const file = this.files[0];
-  const url = URL.createObjectURL(file);
-
-  videoInput.src = url;
-});
-
-captureBtn.addEventListener("click", function () {
-  const canvasCap = document.createElement("canvas");
-
-  canvasCap.width = width;
-  canvasCap.height = height;
-  const ctxCap = canvasCap.getContext("2d");
-  ctxCap.drawImage(videoInput, 0, 0, canvasCap.width, canvasCap.height);
-  const portada = canvasCap.toDataURL("image/png");
-
-  //
-
-  //
-  const images = {
-    ...ImageList.background.src,
-    ...ImageList.icon.src,
-    ...ImageList.laruedaludica.src,
-    ...ImageList.envivo.src,
-    portada,
-  };
-
-  console.log(videoInput, videoInput.width);
-  L.setImages(images, onRender);
-});

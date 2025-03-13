@@ -1,6 +1,8 @@
 import createLapiz from "../../js/utils/createLapiz";
 import ImageList from "../../js/imageList";
-import data from "../../data/rueda-ludica/rd23";
+import data from "../../data/custom/feld";
+
+// CUSTOM
 
 const canvas = document.getElementById("my-canvas");
 
@@ -26,9 +28,6 @@ const onRender = () => {
   data.portada.forEach((portada, i) => {
     const portadaScale = portada.scale || 1;
     L.ctx.save();
-    if (portada.blur) {
-      L.ctx.filter = `blur(${portada.blur}px)`;
-    }
 
     if (i) {
       L.ctx.fillStyle = "rgba(0,0,0,1)";
@@ -188,8 +187,8 @@ const onRender = () => {
     opacity: 0.7,
   });
 
-  const titleX = 10;
-  const laruedaludicaWidth = 1400;
+
+/*   const laruedaludicaWidth = 1400;
   L.imageCropped({
     ...ImageList.laruedaludica.image,
     destiny: {
@@ -198,8 +197,8 @@ const onRender = () => {
       width: laruedaludicaWidth,
       height: laruedaludicaWidth * ImageList.laruedaludica.ratio,
     },
-  });
-  const envivoWidth = 260;
+  }); */
+/*   const envivoWidth = 260;
   L.imageCropped({
     ...ImageList.envivo.image,
     destiny: {
@@ -208,13 +207,13 @@ const onRender = () => {
       width: envivoWidth,
       height: envivoWidth * ImageList.envivo.ratio,
     },
-  });
+  }); */
 
-  L.text({
-    text: `${data.numeroDeEdicion}`,
-    x: 1500 + titleX,
+   L.text({
+    text: `${data.title}`,
+    x: data?.titleX ?? 0,
     y: -30,
-    width: 400,
+    width: 1920,
     fontSize: 300,
     color: "#fff",
     borderWidth: 0,
@@ -222,7 +221,7 @@ const onRender = () => {
     fontFamily: "Libre Baskerville",
     italic: true,
     //textAlign: "center",
-  }).render();
+  }).render(); 
 
   if (data?.texts.length) {
     const xBase = 460;
@@ -276,8 +275,8 @@ L.setImages(
   {
     ...ImageList.background.src,
     ...ImageList.icon.src,
-    ...ImageList.laruedaludica.src,
-    ...ImageList.envivo.src,
+ //   ...ImageList.laruedaludica.src,
+ //   ...ImageList.envivo.src,
     ...portadas,
   },
   onRender

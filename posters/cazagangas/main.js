@@ -1,8 +1,8 @@
 import createLapiz from "../../js/utils/createLapiz";
 import ImageList from "../../js/imageList";
 
-const MES = "Octubre";
-const ANNO = "2024";
+const MES = "Febrero";
+const ANNO = "2025";
 
 const canvas = document.getElementById("my-canvas");
 
@@ -101,6 +101,22 @@ const onRender = () => {
   /////////
   const prText = 70;
   const yText = 60;
+  /*
+  L.text({
+    text: "Evolución de todo el",
+    x: 0,
+    y: 480 + yText,
+    width: width - prText,
+    fontSize: 110,
+    color: "#fff",
+    borderWidth: 0,
+    shadow: "0 0 30px rgba(0,0,0,1)",
+    fontFamily: "Libre Baskerville",
+    textAlign: "right",
+
+    // bold: 600,
+  }).render();
+  */
   L.text({
     text: "Top 10 Cazagangas",
     x: 0,
@@ -129,8 +145,6 @@ const onRender = () => {
     bold: 600,
   }).render();
 };
-
-
 
 L.setImages(
   {

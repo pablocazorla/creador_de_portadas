@@ -1,6 +1,6 @@
 import createLapiz from "../../js/utils/createLapiz";
 import ImageList from "../../js/imageList";
-import data from "../../data/rueda-ludica/rd18";
+import data from "../../data/rueda-ludica/rd23";
 
 const canvas = document.getElementById("my-canvas");
 
@@ -26,6 +26,9 @@ const onRender = () => {
   data.portada.forEach((portada, i) => {
     const portadaScale = portada.scaleInstagram || portada.scale || 1;
     L.ctx.save();
+    if (portada.blurInstagram) {
+      L.ctx.filter = `blur(${portada.blurInstagram}px)`;
+    }
 
     if (i) {
       L.ctx.fillStyle = "rgba(0,0,0,1)";
@@ -185,7 +188,7 @@ const onRender = () => {
     opacity: 0.8,
   });
 
-  const titleX = -10;
+  const titleX = -24;
   const laruedaludicaWidth = 700;
   L.imageCropped({
     ...ImageList.laruedaludica.image,

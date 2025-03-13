@@ -1,6 +1,8 @@
 import createLapiz from "../../js/utils/createLapiz";
 import ImageList from "../../js/imageList";
-import data from "../../data/rueda-ludica/rd23";
+import data from "../../data/partida/harmony";
+
+// CUSTOM
 
 const canvas = document.getElementById("my-canvas");
 
@@ -23,13 +25,18 @@ const onRender = () => {
 
   const portadaLength = data.portada.length;
   const portadaPadding = 160;
+
+  L.ctx.save();
+  if (data.blur) {
+    L.ctx.filter = `blur(${data.blur}px)`;
+  }
+
   data.portada.forEach((portada, i) => {
     const portadaScale = portada.scale || 1;
     L.ctx.save();
     if (portada.blur) {
       L.ctx.filter = `blur(${portada.blur}px)`;
     }
-
     if (i) {
       L.ctx.fillStyle = "rgba(0,0,0,1)";
       L.ctx.shadowColor = "rgba(0,0,0,0.6)";
@@ -101,6 +108,7 @@ const onRender = () => {
 
     L.ctx.restore();
   });
+  L.ctx.restore();
 
   L.rect({
     x: 0,
@@ -120,140 +128,63 @@ const onRender = () => {
     borderWidth: 0,
     opacity: 0.8,
   });
-  L.rect({
-    x: 0,
-    y: 0.5 * (height - rectHeight),
-    width,
-    height: 230,
-    color: "#000",
+
+  // TITLE: PARTIDA
+  const envivoWidth = 440;
+  const xdef = 200;
+  L.text({
+    text: "Partida",
+    x: -xdef,
+    y: data.titleY,
+    width: 1920,
+    fontSize: 120,
+    color: "#eecc5d",
     borderWidth: 0,
-    opacity: 0.4,
-  });
-  L.rect({
-    x: 0,
-    y: 0.5 * (height - rectHeight) + rectHeight - 8,
-    width,
-    height: 8,
-    color: "#000",
-    borderWidth: 0,
-    opacity: 0.8,
-  });
+    shadow: "0 0 30px rgba(0,0,0,1)",
+    fontFamily: "Libre Baskerville",
+    italic: true,
+    textAlign: "center",
+    bold: 600,
+  }).render();
 
-  const lastRectHeight = 360;
-
-  L.rect({
-    x: 0,
-    y: 0.5 * (height - rectHeight) + rectHeight - lastRectHeight,
-    width,
-    height: lastRectHeight,
-    color: "#000",
-    borderWidth: 0,
-    opacity: 0.1,
-  });
-
-  const lastRectHeight2 = 180;
-
-  L.rect({
-    x: 0,
-    y: 0.5 * (height - rectHeight) + rectHeight - lastRectHeight2,
-    width,
-    height: lastRectHeight2,
-    color: "#000",
-    borderWidth: 0,
-    opacity: 0.2,
-  });
-
-  const iconWidth = 900;
-
-  L.imageCropped({
-    ...ImageList.icon.image,
-    destiny: {
-      x: 1250,
-      y: -450,
-      width: iconWidth,
-      height: iconWidth * ImageList.icon.ratio,
-    },
-    opacity: 0.7,
-  });
-
-  const iconWidth2 = 700;
-  L.imageCropped({
-    ...ImageList.icon.image,
-    destiny: {
-      x: -160,
-      y: 670,
-      width: iconWidth2,
-      height: iconWidth2 * ImageList.icon.ratio,
-    },
-    opacity: 0.7,
-  });
-
-  const titleX = 10;
-  const laruedaludicaWidth = 1400;
-  L.imageCropped({
-    ...ImageList.laruedaludica.image,
-    destiny: {
-      x: 40 + titleX,
-      y: 70,
-      width: laruedaludicaWidth,
-      height: laruedaludicaWidth * ImageList.laruedaludica.ratio,
-    },
-  });
-  const envivoWidth = 260;
   L.imageCropped({
     ...ImageList.envivo.image,
     destiny: {
-      x: 1250 + titleX,
-      y: 20,
+      x: 1200 - xdef,
+      y: data.titleY,
       width: envivoWidth,
       height: envivoWidth * ImageList.envivo.ratio,
     },
   });
 
-  L.text({
-    text: `${data.numeroDeEdicion}`,
-    x: 1500 + titleX,
-    y: -30,
-    width: 400,
-    fontSize: 300,
-    color: "#fff",
-    borderWidth: 0,
-    shadow: "0 0 30px rgba(0,0,0,0.9)",
-    fontFamily: "Libre Baskerville",
-    italic: true,
-    //textAlign: "center",
-  }).render();
-
   if (data?.texts.length) {
-    const xBase = 460;
-    const prBase = 100;
     data.texts.forEach(({ title, subtitle, x, y, scale = 1, white }) => {
       L.text({
         text: title || "",
-        x: xBase + x,
+        x: 0,
         y,
-        width: width - xBase - prBase,
+        width: 1920,
         fontSize: 74 * scale,
         color: white ? "#fff" : "#eecc5d",
         borderWidth: 0,
         shadow: "0 0 30px rgba(0,0,0,1)",
         fontFamily: "Libre Baskerville",
         italic: true,
-        textAlign: "right",
+        textAlign: "center",
         bold: 600,
       }).render();
 
       L.text({
         text: subtitle || "",
-        x: xBase + x,
+        x: 0,
         y: 100 * scale + y,
-        width: width - xBase - prBase,
+        width: 1920,
         fontSize: 140 * scale,
         color: "#fff",
         borderWidth: 0,
         shadow: "0 0 30px rgba(0,0,0,1)",
         fontFamily: "Libre Baskerville",
-        textAlign: "right",
+        textAlign: "center",
         bold: 600,
       }).render();
     });
@@ -276,7 +207,7 @@ L.setImages(
   {
     ...ImageList.background.src,
     ...ImageList.icon.src,
-    ...ImageList.laruedaludica.src,
+    //   ...ImageList.laruedaludica.src,
     ...ImageList.envivo.src,
     ...portadas,
   },
