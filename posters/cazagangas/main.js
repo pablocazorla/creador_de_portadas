@@ -1,7 +1,7 @@
 import createLapiz from "../../js/utils/createLapiz";
 import ImageList from "../../js/imageList";
 
-const MES = "Febrero";
+const MES = "Marzo";
 const ANNO = "2025";
 
 const canvas = document.getElementById("my-canvas");
