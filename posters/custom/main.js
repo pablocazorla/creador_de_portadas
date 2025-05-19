@@ -1,6 +1,6 @@
 import createLapiz from "../../js/utils/createLapiz";
 import ImageList from "../../js/imageList";
-import data from "../../data/custom/feld";
+import data from "../../data/custom/trickerion";
 
 // CUSTOM
 
@@ -27,7 +27,12 @@ const onRender = () => {
   const portadaPadding = 160;
   data.portada.forEach((portada, i) => {
     const portadaScale = portada.scale || 1;
+
     L.ctx.save();
+    if (portada.blur) {
+      L.ctx.filter = `blur(${portada.blur}px)`;
+    }
+    const xPos = portada?.xPos || 0;
 
     if (i) {
       L.ctx.fillStyle = "rgba(0,0,0,1)";
@@ -38,19 +43,19 @@ const onRender = () => {
 
       L.ctx.beginPath();
       L.ctx.moveTo(
-        (width / portadaLength) * i + portadaPadding,
+        (width / portadaLength) * i + portadaPadding + xPos,
         0.5 * (height - rectHeight)
       );
       L.ctx.lineTo(
-        (width / portadaLength) * i + width,
+        (width / portadaLength) * i + width + xPos,
         0.5 * (height - rectHeight)
       );
       L.ctx.lineTo(
-        (width / portadaLength) * i + width,
+        (width / portadaLength) * i + width + xPos,
         0.5 * (height - rectHeight) + rectHeight
       );
       L.ctx.lineTo(
-        (width / portadaLength) * i - portadaPadding,
+        (width / portadaLength) * i - portadaPadding + xPos,
         0.5 * (height - rectHeight) + rectHeight
       );
       L.ctx.closePath();
@@ -79,19 +84,19 @@ const onRender = () => {
       L.ctx.strokeStyle = "rgba(255,255,255,0.6)";
       L.ctx.beginPath();
       L.ctx.moveTo(
-        (width / portadaLength) * i + portadaPadding,
+        (width / portadaLength) * i + portadaPadding + xPos,
         0.5 * (height - rectHeight)
       );
       L.ctx.lineTo(
-        (width / portadaLength) * i + width,
+        (width / portadaLength) * i + width + xPos,
         0.5 * (height - rectHeight)
       );
       L.ctx.lineTo(
-        (width / portadaLength) * i + width,
+        (width / portadaLength) * i + width + xPos,
         0.5 * (height - rectHeight) + rectHeight
       );
       L.ctx.lineTo(
-        (width / portadaLength) * i - portadaPadding,
+        (width / portadaLength) * i - portadaPadding + xPos,
         0.5 * (height - rectHeight) + rectHeight
       );
       L.ctx.closePath();
@@ -119,15 +124,15 @@ const onRender = () => {
     borderWidth: 0,
     opacity: 0.8,
   });
-  L.rect({
-    x: 0,
-    y: 0.5 * (height - rectHeight),
-    width,
-    height: 230,
-    color: "#000",
-    borderWidth: 0,
-    opacity: 0.4,
-  });
+  // L.rect({
+  //   x: 0,
+  //   y: 0.5 * (height - rectHeight),
+  //   width,
+  //   height: 230,
+  //   color: "#000",
+  //   borderWidth: 0,
+  //   opacity: 0.4,
+  // });
   L.rect({
     x: 0,
     y: 0.5 * (height - rectHeight) + rectHeight - 8,
@@ -187,8 +192,7 @@ const onRender = () => {
     opacity: 0.7,
   });
 
-
-/*   const laruedaludicaWidth = 1400;
+  /*   const laruedaludicaWidth = 1400;
   L.imageCropped({
     ...ImageList.laruedaludica.image,
     destiny: {
@@ -198,7 +202,7 @@ const onRender = () => {
       height: laruedaludicaWidth * ImageList.laruedaludica.ratio,
     },
   }); */
-/*   const envivoWidth = 260;
+  /*   const envivoWidth = 260;
   L.imageCropped({
     ...ImageList.envivo.image,
     destiny: {
@@ -209,7 +213,7 @@ const onRender = () => {
     },
   }); */
 
-   L.text({
+  L.text({
     text: `${data.title}`,
     x: data?.titleX ?? 0,
     y: -30,
@@ -221,7 +225,7 @@ const onRender = () => {
     fontFamily: "Libre Baskerville",
     italic: true,
     //textAlign: "center",
-  }).render(); 
+  }).render();
 
   if (data?.texts.length) {
     const xBase = 460;
@@ -275,8 +279,8 @@ L.setImages(
   {
     ...ImageList.background.src,
     ...ImageList.icon.src,
- //   ...ImageList.laruedaludica.src,
- //   ...ImageList.envivo.src,
+    //   ...ImageList.laruedaludica.src,
+    //   ...ImageList.envivo.src,
     ...portadas,
   },
   onRender

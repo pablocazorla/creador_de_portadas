@@ -1,7 +1,7 @@
 import createLapiz from "../../js/utils/createLapiz";
 import ImageList from "../../js/imageList";
 
-const MES = "Marzo";
+const MES = "Abril";
 const ANNO = "2025";
 
 const canvas = document.getElementById("my-canvas");
@@ -29,19 +29,19 @@ const onRender = () => {
       x: 0,
       y: 0.5 * (height - rectHeight),
       width,
-      height: width * ImageList.cazagangas.ratio - 2 * (height - rectHeight),
+      height: width * ImageList.cazagangas.ratio - 1 * (height - rectHeight),
     },
   });
 
-  /*   L.rect({
+  L.rect({
     x: 0,
     y: 0.5 * (height - rectHeight),
     width,
     height: rectHeight,
     color: "#000",
     borderWidth: 0,
-    opacity: 0.5,
-  }); */
+    opacity: 0.1,
+  });
   L.rect({
     x: 0,
     y: 0.5 * (height - rectHeight),
@@ -71,7 +71,7 @@ const onRender = () => {
     height: lastRectHeight2,
     color: "#000",
     borderWidth: 0,
-    opacity: 0.4,
+    opacity: 0.7,
   });
 
   const iconWidth = 900;

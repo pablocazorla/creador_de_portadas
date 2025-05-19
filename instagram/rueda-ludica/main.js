@@ -1,6 +1,6 @@
 import createLapiz from "../../js/utils/createLapiz";
 import ImageList from "../../js/imageList";
-import data from "../../data/rueda-ludica/rd25";
+import data from "../../data/rueda-ludica/rd26";
 
 const canvas = document.getElementById("my-canvas");
 
